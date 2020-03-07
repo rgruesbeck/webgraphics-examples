@@ -19,6 +19,8 @@ class Game {
             coords: [0.5, 0.5, 0],
             pointSize: 100
         };
+
+        document.addEventListener('keydown', (e) => { this.handleInput(e); });
     }
 
     update() {
@@ -40,6 +42,24 @@ class Game {
 
     start() {
         this.update();
+    }
+
+    handleInput({ key }) {
+        if (key === 'ArrowRight') {
+            this.state.coords[0] += 0.01;
+        }
+
+        if (key === 'ArrowLeft') {
+            this.state.coords[0] -= 0.01;
+        }
+
+        if (key === 'ArrowUp') {
+            this.state.coords[1] += 0.01;
+        }
+
+        if (key === 'ArrowDown') {
+            this.state.coords[1] -= 0.01;
+        }
     }
 }
 
