@@ -24,7 +24,7 @@ class Game {
     }
 
     update() {
-        let size = Math.cos(this.state.frame / 10) * 10 + 20;
+        let size = Math.cos(this.state.frame / 10) * 10 + 25;
         this.state.pointSize = size;
 
         this.state.frame = window.requestAnimationFrame(() => {
