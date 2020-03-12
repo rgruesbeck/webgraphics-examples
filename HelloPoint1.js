@@ -1,18 +1,20 @@
 // Vertex shader program
 const VSHADER_SOURCE = `
     void main() {
+        // Coordinates
         gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
 
-        // Coordinates
-        gl_PointSize = 10.0; // Set the point size
-    };
+        // Set the point size
+        gl_PointSize = 10.0;
+    }
 `;
 
 // Fragment shader program
 const FSHADER_SOURCE = `
     void main() {
-        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Set the color
-    };
+        // Set the color
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
 `;
 
 function main() {
@@ -30,7 +32,7 @@ function main() {
     }
 
     // Initialize shaders
-    if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    if (!initShaders(gl)) {
         return console.log("Failed to initialize shaders.");
     }
 
@@ -42,15 +44,16 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Draw a point
-    gl.drawArray(gl.POINTS, 0, 1);
+    gl.drawArrays(gl.POINTS, 0, 1);
 }
 
-function initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE) {
-
+function initShaders(gl) {
+    // Vertext Shader
     let vertexShader = gl.createShader(gl.VERTEX_SHADER); // create new vertex shader
     gl.shaderSource(vertexShader, VSHADER_SOURCE); // load shader code
     gl.compileShader(vertexShader); // compile shader
 
+    // Fragment Shader
     let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
     gl.shaderSource(fragmentShader, FSHADER_SOURCE);
     gl.compileShader(fragmentShader);
@@ -66,5 +69,5 @@ function initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE) {
     gl.linkProgram(shaderProgram);
     gl.useProgram(shaderProgram);
 
-    return true;
+    return gl.getProgramParameter(shaderProgram, gl.LINK_STATUS);
 }
