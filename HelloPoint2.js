@@ -11,12 +11,15 @@ const VSHADER_SOURCE = `
     // <Storage Qualifier> <Type> <Variable Name>
     attribute vec4 a_Position;
 
+    // Size attribute
+    attribute float a_PointSize;
+
     void main() {
         // Coordinates
         gl_Position = a_Position;
 
         // Set the point size
-        gl_PointSize = 10.0;
+        gl_PointSize = a_PointSize;
     }
 `;
 
@@ -34,21 +37,11 @@ const FSHADER_SOURCE = `
 `;
 
 function main() {
-
-    // Retrieve <canvas> element
-    let canvas = document.getElementById("webgl");
-    if (!canvas) {
-        return console.error("Browser does not support WebGL");
-    }
-
-    // Get the rendering context for the WebGL
-    let gl = canvas.getContext("webgl");
-    if (!gl) {
-        return console.error("Couldn't create webgl context");
-    }
+    // Initialize WebGL
+    let gl = initGL("webgl");
 
     // Initialize shaders
-    if (!initShaders(gl)) {
+    if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
         return console.log("Failed to initialize shaders.");
     }
 
@@ -71,6 +64,14 @@ function main() {
     let position = new Float32Array([0.0, 0.0, 0.0, 1.0])
     gl.vertexAttrib4fv(a_Position, position)
 
+    // Pass the point size attribute
+    let a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize');
+    if (a_PointSize < 0) {
+        return console.log('Failed to get the storage location of a_PointSize');
+    }
+
+    gl.vertexAttrib1f(a_PointSize, 5.0);
+
     // Specify the color for clearing <canvas>
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -82,7 +83,29 @@ function main() {
     gl.drawArrays(gl.POINTS, 0, 1);
 }
 
-function initShaders(gl) {
+function initGL(canvas_id) {
+    // Check for canvas id
+    if (!canvas_id) {
+        return console.error("Canvas ID not specified");
+    }
+
+    // Retrieve <canvas> element
+    let canvas = document.getElementById(canvas_id);
+    if (!canvas) {
+        return console.error("Browser does not support WebGL");
+    }
+
+    // Get the rendering context for the WebGL
+    let gl = canvas.getContext("webgl");
+    if (!gl) {
+        return console.error("Couldn't create webgl context");
+    }
+
+    // Return WebGL context
+    return gl;
+}
+
+function initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE) {
     // Vertext Shader
     let vertexShader = gl.createShader(gl.VERTEX_SHADER); // create new vertex shader
     gl.shaderSource(vertexShader, VSHADER_SOURCE); // load shader code
