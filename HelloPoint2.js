@@ -7,9 +7,13 @@
     This vertex shader specifies the position and size of a point.
  */
 const VSHADER_SOURCE = `
+    // Position attribute
+    // <Storage Qualifier> <Type> <Variable Name>
+    attribute vec4 a_Position;
+
     void main() {
         // Coordinates
-        gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+        gl_Position = a_Position;
 
         // Set the point size
         gl_PointSize = 10.0;
@@ -48,6 +52,16 @@ function main() {
         return console.log("Failed to initialize shaders.");
     }
 
+    // Get the storate location of attribute variable 
+    let a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    if (a_Position < 0) {
+        return console.log('Failed to get the storage location of a_Position');
+    }
+
+    console.log(a_Position);
+    // Pass the vertex position to attribute variable
+    gl.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0)
+
     // Specify the color for clearing <canvas>
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -71,15 +85,15 @@ function initShaders(gl) {
     gl.compileShader(fragmentShader);
 
     // CREATE SHADER PROGRAM
-    let shaderProgram = gl.createProgram();
+    gl.program = gl.createProgram();
 
     // attach shaders
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
+    gl.attachShader(gl.program, vertexShader);
+    gl.attachShader(gl.program, fragmentShader);
 
     // link and use program
-    gl.linkProgram(shaderProgram);
-    gl.useProgram(shaderProgram);
+    gl.linkProgram(gl.program);
+    gl.useProgram(gl.program);
 
-    return gl.getProgramParameter(shaderProgram, gl.LINK_STATUS);
+    return gl.getProgramParameter(gl.program, gl.LINK_STATUS);
 }
