@@ -58,9 +58,18 @@ function main() {
         return console.log('Failed to get the storage location of a_Position');
     }
 
-    console.log(a_Position);
     // Pass the vertex position to attribute variable
-    gl.vertexAttrib3f(a_Position, 0.0, 0.0, 0.0)
+    // eg: gl.vertexAttrib3f()
+    // <method name> <params #> <param type>
+    // equivalent to glVertexAttrib3f() in OpenGL
+
+    // Using parameters
+    // let position = [0.0, 0.0, 0.0].map(val => Math.random());
+    // gl.vertexAttrib3f(a_Position, ...position);
+
+    // Using typed array
+    let position = new Float32Array([0.0, 0.0, 0.0, 1.0])
+    gl.vertexAttrib4fv(a_Position, position)
 
     // Specify the color for clearing <canvas>
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
