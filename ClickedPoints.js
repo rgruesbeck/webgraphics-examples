@@ -58,19 +58,16 @@ function main() {
         let y = e.clientY; // y coordinate of mouse
         let rect = e.target.getBoundingClientRect();
 
-        x = (x - rect.left - gl.canvas.width / 2) / (gl.canvas.width / 2);
-        y = (gl.canvas.height / 2 - (y - rect.top)) / (gl.canvas.width / 2);
+        let point = normalizeCoordinates([
+            x - rect.left,
+            y - rect.top
+        ], gl.canvas.width, gl.canvas.height);
 
-        console.log('[0, 0] -> [-1, 1]', normalizeCoordinates(0, 0, gl.canvas.width, gl.canvas.height));
-        console.log('[200, 200] -> [0, 0]', normalizeCoordinates(200, 200, gl.canvas.width, gl.canvas.height));
-        console.log('[400, 400] -> [1, -1]', normalizeCoordinates(400, 400, gl.canvas.width, gl.canvas.height));
-
-        g_points.push(x);
-        g_points.push(y);
+        g_points.push(point);
 
         render(gl, () => {
-            for (let i = 0; i < g_points.length; i += 2) {
-                gl.vertexAttrib3f(a_Position, g_points[i], g_points[i + 1], 0.0);
+            for (let i = 0; i < g_points.length; i++) {
+                gl.vertexAttrib3f(a_Position, g_points[i][0], g_points[i][1], 0.0);
                 gl.drawArrays(gl.POINTS, 0, 1);
             }
         })
@@ -81,7 +78,7 @@ function main() {
 
 function render(gl, render_methods) {
     // Specify the color for clearing <canvas>
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
     // Clear context with color buffer
     // (this is call to OpenGL ES which doesn't use canvas)
@@ -142,19 +139,19 @@ function initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE) {
 
 // input positive coordinates
 // output normalized coordinates
-function normalizeCoordinates(x, y, width, height) {
-    return [{ x, y }]
+function normalizeCoordinates(vertex, width, height) {
+    return [vertex]
     .map(pt => {
         // shift origin to center
-        // invert direction for y
-        pt.x = pt.x - width / 2;
-        pt.y = height / 2 - pt.y;
+        // and invert direction for y
+        pt[0] = pt[0] - width / 2;
+        pt[1] = height / 2 - pt[1];
         return pt;
     })
     .map(pt => {
         // normalize to range -1 to 1
-        pt.x = pt.x / (width / 2);
-        pt.y = pt.y / (height / 2);
+        pt[0] = pt[0] / (width / 2);
+        pt[1] = pt[1] / (height / 2);
         return pt;
     })
     .reduce(pt => pt);
