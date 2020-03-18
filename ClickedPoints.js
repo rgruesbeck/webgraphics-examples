@@ -61,6 +61,10 @@ function main() {
         x = (x - rect.left - gl.canvas.width / 2) / (gl.canvas.width / 2);
         y = (gl.canvas.height / 2 - (y - rect.top)) / (gl.canvas.width / 2);
 
+        console.log('[0, 0] -> [-1, 1]', normalizeCoordinates(0, 0, gl.canvas.width, gl.canvas.height));
+        console.log('[200, 200] -> [0, 0]', normalizeCoordinates(200, 200, gl.canvas.width, gl.canvas.height));
+        console.log('[400, 400] -> [1, -1]', normalizeCoordinates(400, 400, gl.canvas.width, gl.canvas.height));
+
         g_points.push(x);
         g_points.push(y);
 
@@ -75,7 +79,7 @@ function main() {
     render(gl);
 }
 
-function render(gl, draw) {
+function render(gl, render_methods) {
     // Specify the color for clearing <canvas>
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -83,9 +87,9 @@ function render(gl, draw) {
     // (this is call to OpenGL ES which doesn't use canvas)
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Call draw method
-    if (draw) {
-        draw();
+    // Call render methods
+    if (render_methods) {
+        render_methods();
     }
 }
 
@@ -134,4 +138,25 @@ function initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE) {
     gl.useProgram(gl.program);
 
     return gl.getProgramParameter(gl.program, gl.LINK_STATUS);
+}
+
+// input positive coordinates
+// output normalized coordinates
+function normalizeCoordinates(x, y, width, height) {
+    return [{ x, y }]
+    .map(pt => {
+        // shift origin to center
+        // invert direction for y
+        pt.x = pt.x - width / 2;
+        pt.y = height / 2 - pt.y;
+        return pt;
+    })
+    .map(pt => {
+        // normalize to range -1 to 1
+        pt.x = pt.x / (width / 2);
+        pt.y = pt.y / (height / 2);
+        return pt;
+    })
+    .reduce(pt => pt);
+
 }
