@@ -46,14 +46,16 @@ function main() {
     }
 
     // Get the storage location of attribute variable 
+    // not found value is -1
     let a_Position = gl.getAttribLocation(gl.program, 'a_Position');
     if (a_Position < 0) {
         return console.log('Failed to get the storage location of a_Position');
     }
 
     // Get the storage location of u_FragColor
+    // not found value is null 
     let u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
-    if (u_FragColor < 0) {
+    if (!u_FragColor) {
         return console.log('Failed to get the storage location of u_FragColor');
     }
 
