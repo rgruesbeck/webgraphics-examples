@@ -11,3 +11,7 @@ Web Graphics Examples
 [Pixel Spirit Deck](https://github.com/patriciogonzalezvivo/PixelSpiritDeck)
 
 [Learn OpenGL](https://learnopengl.com/Introduction)
+
+[A modular approach to WebGL programming](https://github.com/mikolalysenko/gl-modules)
+
+[Linear Programing](https://github.com/mikolalysenko/applications-of-linear-programming)
