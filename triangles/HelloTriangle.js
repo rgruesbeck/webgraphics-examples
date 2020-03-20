@@ -14,6 +14,8 @@ const VSHADER_SOURCE = `
     void main() {
         // Coordinates
         gl_Position = a_Position;
+
+        gl_PointSize = 2.0;
     }
 `;
 
@@ -51,8 +53,48 @@ function main() {
         return console.log('Failed to get the storage location of a_Position');
     }
 
+    // Event handlers
+    document.addEventListener('change', (e) => {
+        // handle mode selection
+        if (e.target.id === 'mode-select') {
+            handleModeSelect(e.target.value);
+        }
+    })
+
+    function handleModeSelect(mode) {
+        if (mode === 'LINES') {
+            render(gl, () => {
+                gl.drawArrays(gl.LINES, 0, n);
+            });
+        } else if (mode === 'LINE_STRIP') {
+            render(gl, () => {
+                gl.drawArrays(gl.LINE_STRIP, 0, n);
+            });
+        } else if (mode === 'LINE_LOOP') {
+            render(gl, () => {
+                gl.drawArrays(gl.LINE_LOOP, 0, n);
+            });
+        } else if (mode === 'TRIANGLES') {
+            render(gl, () => {
+                gl.drawArrays(gl.TRIANGLES, 0, n);
+            });
+        } else if (mode === 'TRIANGLE_STRIP') {
+            render(gl, () => {
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+            });
+        } else if (mode === 'TRIANGLE_FAN') {
+            render(gl, () => {
+                gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
+            });
+        } else {
+            render(gl, () => {
+                gl.drawArrays(gl.POINTS, 0, n);
+            });
+        }
+    }
+
     render(gl, () => {
-        gl.drawArrays(gl.TRIANGLES, 0, n); // n is 3
+        gl.drawArrays(gl.POINTS, 0, n); // n is 3
     });
 }
 
@@ -81,6 +123,9 @@ function initGL(canvas_id) {
     if (!canvas) {
         return console.error("Browser does not support WebGL");
     }
+
+    // Set the point size
+    gl_PointSize = 10.0;
 
     // Get the rendering context for the WebGL
     let gl = canvas.getContext("webgl");
