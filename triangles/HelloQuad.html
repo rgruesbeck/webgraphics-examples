@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Quad</title>
+</head>
+
+<body onload="main()">
+    <canvas id="webgl" width="400" height="400">
+        Please use a browser that supports "canvas"
+    </canvas>
+    <label for="mode-select">Choose a draw mode:</label>
+    <select name="modes" id="mode-select">
+        <option value="POINTS">POINTS</option>
+        <option value="LINES">LINES</option>
+        <option value="LINE_STRIP">LINE_STRIP</option>
+        <option value="LINE_LOOP">LINE_LOOP</option>
+        <option value="TRIANGLES">TRIANGLES</option>
+        <option value="TRIANGLE_STRIP">TRIANGLE_STRIP</option>
+        <option value="TRIANGLE_FAN">TRIANGLE_FAN</option>
+    </select>
+    <script src="HelloQuad.js"></script>
+</body>
+
+</html>
