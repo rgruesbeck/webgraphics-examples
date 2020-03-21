@@ -8,7 +8,7 @@
  */
 const VSHADER_SOURCE = `
     attribute vec4 a_Position;
-    uniform float u_CosB, u_SinB;
+    uniform vec2 u_CosBSinB;
 
     void main() {
         // Coordinates
@@ -89,9 +89,9 @@ function main() {
             render(gl, () => {
                 gl.drawArrays(gl.LINE_LOOP, 0, n);
             });
-        } else if (mode === 'TRIANGLES') {
+        } else if (mode === 'POINTS') {
             render(gl, () => {
-                gl.drawArrays(gl.TRIANGLES, 0, n);
+                gl.drawArrays(gl.POINTS, 0, n);
             });
         } else if (mode === 'TRIANGLE_STRIP') {
             render(gl, () => {
@@ -103,13 +103,13 @@ function main() {
             });
         } else {
             render(gl, () => {
-                gl.drawArrays(gl.POINTS, 0, n);
+                gl.drawArrays(gl.TRIANGLES, 0, n);
             });
         }
     }
 
     render(gl, () => {
-        gl.drawArrays(gl.POINTS, 0, n); // n is 3
+        gl.drawArrays(gl.TRIANGLES, 0, n); // n is 3
     });
 }
 
